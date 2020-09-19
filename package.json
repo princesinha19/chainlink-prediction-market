@@ -1,13 +1,14 @@
 {
   "name": "interest-prediction-market",
   "version": "1.0.0",
-  "description": "",
+  "description": "Interest Prediction Market using Chainlink and Aave",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "compile": "truffle compile",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "get:dependency": "cd client/ && yarn",
+    "start:client": "cd client/ && yarn start",
+    "compile": "truffle compile"
   },
   "author": "",
   "license": "ISC"
