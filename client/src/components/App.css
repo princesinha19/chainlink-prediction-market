@@ -1,0 +1,69 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+html, body, body > div, .app {
+  background-color: rgb(236, 243, 236);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.form-card {
+  width: 40%;
+  margin-top: 4%;
+}
+
+.spinner-border {
+  width: 4rem !important;
+  height: 4rem !important;
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+.vertical-line {
+  border-left: solid gray;
+}
+
+.market-card {
+  width: 40%;
+  margin-top: 2%;
+  color: black
+}
+
+.market-card:hover {
+  background-color:rgb(240, 239, 239);
+  text-decoration: none;
+}
+
+.g-pt-90 {
+  padding-top: 17rem !important;
+}

@@ -1,0 +1,31 @@
+import React from "react";
+import {
+    Button,
+    Modal,
+} from "react-bootstrap";
+
+export default function SuccessModal({
+    open,
+    toggle,
+    children,
+}) {
+    return (
+        <Modal
+            show={open}
+            onHide={toggle}
+            animation={false}
+        >
+            <Modal.Header closeButton>
+                <Modal.Title>Notification</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>{children}</Modal.Body>
+            <Modal.Footer>
+                <Button variant="success"
+                    onClick={toggle}
+                >
+                    Ok
+                </Button>
+            </Modal.Footer>
+        </Modal>
+    );
+}

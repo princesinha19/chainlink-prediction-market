@@ -1,0 +1,14 @@
+{
+  "short_name": "Interest Prediction Market",
+  "name": "Interest Prediction Market",
+  "icons": [
+    {
+      "src": "chainlink.svg",
+      "type": "image/png"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
