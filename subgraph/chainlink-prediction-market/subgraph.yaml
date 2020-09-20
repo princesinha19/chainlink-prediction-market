@@ -1,4 +1,4 @@
-specVersion: 0.0.1
+specVersion: 0.0.2
 description: chainlink-aave prediction market
 repository: https://github.com/princesinha19/interest-prediction-market
 schema:
@@ -12,7 +12,7 @@ dataSources:
       abi: chainlinkpm
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.1
+      apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
         - Prediction
@@ -21,8 +21,8 @@ dataSources:
         - Position
         - Predictor
       abis:
-        - name: chainlinkpm
-          file: ./abis/chainlinkpm.json
+        - name: PredictionMarket
+          file: ./abis/PredictionMarket.json
       eventHandlers:
         - event: NewPrediction(address, bytes32, uint256)
           handler: handleNewPrediction

@@ -18,7 +18,7 @@ type Market @entity {
   token: Bytes
   type: String
   question: String
-  positions: [Position]
+  # positions: [Position!]
   startTime: BigInt
   closeTime: BigInt
 }
