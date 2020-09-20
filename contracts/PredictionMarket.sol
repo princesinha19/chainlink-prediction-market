@@ -12,6 +12,7 @@ contract PredictionMarket is AaveClient, APIConsumer {
     bool public isLessRisky;
     string resultApi;
     string resultPath;
+    bool isStakedOnAave;
     bool public isMarketResolved;
     uint256 public marketCloseTimestamp;
     uint256 public predictionCloseTimestamp;
@@ -80,8 +81,11 @@ contract PredictionMarket is AaveClient, APIConsumer {
             "Can't lend before all prediction !!"
         );
 
-        // Deposit all staked asset to Aave
-        depositToken(totalAmountStaked);
+        if (totalAmountStaked > 0) {
+            // Deposit all staked asset to Aave
+            depositToken(totalAmountStaked);
+            isStakedOnAave = true;
+        }
     }
 
     function resolveMarket() public {
@@ -93,8 +97,10 @@ contract PredictionMarket is AaveClient, APIConsumer {
 
         isMarketResolved = true;
 
-        // Withdraw all staked asset from Aave
-        withdrawAToken();
+        if (isStakedOnAave) {
+            // Withdraw all staked asset from Aave
+            withdrawAToken();
+        }
 
         // Call Chainlink Request data function
         requestResult(resultApi, resultPath);
