@@ -18,6 +18,12 @@ contract PredictionMarket is AaveClient, APIConsumer {
     uint256 public predictionCloseTimestamp;
     uint256 public totalAmountStaked;
 
+    // events
+    event NewPrediction(address, bytes32, uint256);
+    event AaveLend(uint256);
+    event MarketResolved(uint256, bool);
+    event Withdrawn(address, uint256);
+
     // Maps all the prediction made
     mapping(address => bytes32) public prediction;
 
@@ -61,7 +67,6 @@ contract PredictionMarket is AaveClient, APIConsumer {
             prediction[msg.sender] == bytes32(0),
             "You have already made a prediction !!"
         );
-
         require(
             IERC20(token).transferFrom(msg.sender, address(this), _stakeAmount)
         );
@@ -73,6 +78,7 @@ contract PredictionMarket is AaveClient, APIConsumer {
         uniquePredictionValue[_prediction] += _stakeAmount;
 
         totalAmountStaked += _stakeAmount;
+        emit NewPrediction(msg.sender, _prediction, _stakeAmount);
     }
 
     function lendOnAave() public {
@@ -104,6 +110,7 @@ contract PredictionMarket is AaveClient, APIConsumer {
 
         // Call Chainlink Request data function
         requestResult(resultApi, resultPath);
+        emit MarketResolved(block.number, true);
     }
 
     function withdrawReward() public {
@@ -118,11 +125,12 @@ contract PredictionMarket is AaveClient, APIConsumer {
                 uint256 ratio = amountStaked[msg.sender] /
                     uniquePredictionValue[predictionResult];
 
-                uint256 totalAmount = ratio * tokenWithInterest;
+                uint256 _transferAmount = ratio * tokenWithInterest;
 
                 isAlreadyWithdrawn[msg.sender] = true;
 
-                IERC20(token).transfer(msg.sender, totalAmount);
+                IERC20(token).transfer(msg.sender, _transferAmount);
+                emit Withdrawn(msg.sender, _transferAmount);
             }
         } else {
             uint256 transferAmount = amountStaked[msg.sender];
@@ -133,12 +141,11 @@ contract PredictionMarket is AaveClient, APIConsumer {
 
                 uint256 reward = ratio *
                     (tokenWithInterest - totalAmountStaked);
-
                 transferAmount += reward;
             }
 
             isAlreadyWithdrawn[msg.sender] = true;
-
+            emit Withdrawn(msg.sender, transferAmount);
             IERC20(token).transfer(msg.sender, transferAmount);
         }
     }
