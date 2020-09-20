@@ -16,6 +16,7 @@ import Loading from "../Utils/Loading";
 import pmAbi from "../../utils/pmAbi.json";
 import erc20Abi from "../../utils/erc20Abi.json";
 import { useParams } from "react-router-dom";
+import history from "../Utils/History";
 
 export default function CreateMarket() {
     let routes;
@@ -60,26 +61,6 @@ export default function CreateMarket() {
     });
 
     const [addressPredictions] = useState([]);
-
-    const checkWeb3Connection = async () => {
-        const web3 = window.ethereum;
-        await web3.enable();
-
-        const provider = new ethers.providers.Web3Provider(web3);
-        const signer = provider.getSigner();
-        const networkId = 42;
-
-        if (networkId !== await signer.getChainId()) {
-            setLoading(false);
-
-            setErrorModal({
-                open: true,
-                msg: "Incorrect network choosen !! Please choose correct network.",
-            });
-        } else {
-            setShowMakePrediction(true);
-        }
-    };
 
     const getMarketData = async () => {
         const web3 = window.ethereum;
@@ -156,19 +137,23 @@ export default function CreateMarket() {
     }
 
     const approveDai = async (amount) => {
-        const erc20 = new ethers.Contract(
-            daiContractAddress,
-            erc20Abi,
-            provider.getSigner(),
-        );
+        try {
+            const erc20 = new ethers.Contract(
+                daiContractAddress,
+                erc20Abi,
+                provider.getSigner(),
+            );
 
-        setIsApproving(true);
+            setIsApproving(true);
 
-        const tx = await erc20.approve(pmContractAddress, amount);
+            const tx = await erc20.approve(pmContractAddress, amount);
 
-        await provider.waitForTransaction(tx.hash);
+            await provider.waitForTransaction(tx.hash);
 
-        setIsApproving(false);
+            setIsApproving(false);
+        } catch {
+            setIsApproving(false);
+        }
     }
 
     const makePrediction = async () => {
@@ -242,6 +227,10 @@ export default function CreateMarket() {
         const index = tempTime.indexOf('.');
 
         return tempTime.substring(0, index) + ' UTC';
+    }
+
+    const handleReload = () => {
+        history.go(0);
     }
 
     useEffect(() => {
@@ -386,7 +375,7 @@ export default function CreateMarket() {
                                                                             size="sm"
                                                                         >
                                                                             {isProcessing ?
-                                                                                <div>
+                                                                                <div className="d-flex align-items-center">
                                                                                     Processing
                                                                                     <span className="loading ml-2"></span>
                                                                                 </div>
@@ -497,7 +486,7 @@ export default function CreateMarket() {
                                             variant="outline-success"
                                         >
                                             {isApproving ?
-                                                <div>
+                                                <div className="d-flex align-items-center">
                                                     Approving
                                                     <span className="loading ml-2"></span>
                                                 </div>
@@ -522,7 +511,7 @@ export default function CreateMarket() {
                         addressPredictions[0].prediction === zeroBytes ?
                         <Card.Footer className="text-center" style={{ backgroundColor: '#FFFFFF50' }}>
                             <Button
-                                onClick={checkWeb3Connection}
+                                onClick={setShowMakePrediction}
                                 variant="outline-success"
                             >
                                 Want to Predict ?
@@ -542,6 +531,7 @@ export default function CreateMarket() {
                 <SuccessModal
                     open={successModal.open}
                     toggle={() => setSuccessModal({ ...successModal, open: false })}
+                    onConfirm={handleReload}
                 >
                     {successModal.msg}
                 </SuccessModal>

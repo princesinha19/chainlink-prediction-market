@@ -8,7 +8,13 @@ export default function SuccessModal({
     open,
     toggle,
     children,
+    onConfirm,
 }) {
+    const handleClick = () => {
+        toggle();
+        onConfirm();
+    };
+
     return (
         <Modal
             show={open}
@@ -21,7 +27,7 @@ export default function SuccessModal({
             <Modal.Body>{children}</Modal.Body>
             <Modal.Footer>
                 <Button variant="success"
-                    onClick={toggle}
+                    onClick={handleClick}
                 >
                     Ok
                 </Button>
