@@ -5,9 +5,9 @@ type Prediction @entity {
   stake: BigInt!
 }
 
-type AaveLend @entity {
+type Lend @entity {
   id: ID!
-  amount: Bytes!
+  amount: BigInt!
 }
 
 type Market @entity {

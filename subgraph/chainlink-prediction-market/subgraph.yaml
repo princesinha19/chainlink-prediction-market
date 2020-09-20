@@ -8,15 +8,15 @@ dataSources:
     name: chainlink prediction market
     network: kovan
     source:
-      address: ''
-      abi: chainlinkpm
+      address: '0x18B55ab900b24b8c9891416c7E400cA2523E6c47'
+      abi: PredictionMarket
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
         - Prediction
-        - AaveLend
+        - Lend
         - Market
         - Position
         - Predictor
@@ -24,12 +24,12 @@ dataSources:
         - name: PredictionMarket
           file: ./abis/PredictionMarket.json
       eventHandlers:
-        - event: NewPrediction(address, bytes32, uint256)
+        - event: NewPrediction(address,bytes32,uint256)
           handler: handleNewPrediction
         - event: AaveLend(uint256)
           handler: handleAaveLend
-        - event: MarketResolved(uint256, bool)
+        - event: MarketResolved(uint256,bool)
           handler: handleMarketResolve
-        - event: Withdrawn(address, uint256)
+        - event: Withdrawn(address,uint256)
           handler: handleWithdraw
       file: ./src/mapping.ts
