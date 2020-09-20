@@ -1,6 +1,6 @@
 pragma solidity ^0.6.0;
 
-import "../interfaces/IERC20.sol";
+import "./interfaces/IERC20.sol";
 
 contract AaveClient {
     address daiToken;
@@ -61,7 +61,7 @@ contract AaveClient {
     }
 
     function getDAIBalance() public view returns (uint256) {
-        return IERC20(daiToken).balanceOf(address(this));green
+        return IERC20(daiToken).balanceOf(address(this));
     }
 }
 

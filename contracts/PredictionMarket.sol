@@ -2,7 +2,7 @@ pragma solidity ^0.6.0;
 
 import "./Chainlink.sol";
 import "./AaveClient.sol";
-import "../interfaces/IERC20.sol";
+import "./interfaces/IERC20.sol";
 
 contract PredictionMarket is AaveClient, APIConsumer {
     address public token;
