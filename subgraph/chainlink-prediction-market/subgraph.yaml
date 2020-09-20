@@ -1,0 +1,35 @@
+specVersion: 0.0.1
+description: chainlink-aave prediction market
+repository: https://github.com/princesinha19/interest-prediction-market
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: chainlink prediction market
+    network: kovan
+    source:
+      address: ''
+      abi: chainlinkpm
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.1
+      language: wasm/assemblyscript
+      entities:
+        - Prediction
+        - AaveLend
+        - Market
+        - Position
+        - Predictor
+      abis:
+        - name: chainlinkpm
+          file: ./abis/chainlinkpm.json
+      eventHandlers:
+        - event: NewPrediction(address, bytes32, uint256)
+          handler: handleNewPrediction
+        - event: AaveLend(uint256)
+          handler: handleAaveLend
+        - event: MarketResolved(uint256, bool)
+          handler: handleMarketResolve
+        - event: Withdrawn(address, uint256)
+          handler: handleWithdraw
+      file: ./src/mapping.ts
