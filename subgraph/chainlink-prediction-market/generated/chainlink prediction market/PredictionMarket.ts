@@ -95,11 +95,11 @@ export class MarketResolved__Params {
     this._event = event;
   }
 
-  get param0(): BigInt {
+  get blockNumber(): BigInt {
     return this._event.parameters[0].value.toBigInt();
   }
 
-  get param1(): boolean {
+  get isResolved(): boolean {
     return this._event.parameters[1].value.toBoolean();
   }
 }
@@ -335,6 +335,21 @@ export class PredictionMarket extends ethereum.SmartContract {
       "isMarketResolved():(bool)",
       []
     );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
+  isStakedOnAave(): boolean {
+    let result = super.call("isStakedOnAave", "isStakedOnAave():(bool)", []);
+
+    return result[0].toBoolean();
+  }
+
+  try_isStakedOnAave(): ethereum.CallResult<boolean> {
+    let result = super.tryCall("isStakedOnAave", "isStakedOnAave():(bool)", []);
     if (result.reverted) {
       return new ethereum.CallResult();
     }

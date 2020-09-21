@@ -27,8 +27,8 @@ export function handleAaveLend(event: AaveLend): void {
 export function handleMarketResolve(event: MarketResolved): void {
   let predictionMarket = new Market(event.transaction.hash.toHex() +
     "-" + event.logIndex.toString())
-  predictionMarket.resolveTime = event.params.blockNumber.toString()
-  predictionMarket.isResolved = event.params.isResolved.toString()
+  predictionMarket.resolveTime = event.params.blockNumber
+  predictionMarket.isResolved = event.params.isResolved
   predictionMarket.save()
 }
 

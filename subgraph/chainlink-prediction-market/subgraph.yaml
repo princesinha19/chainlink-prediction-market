@@ -8,7 +8,7 @@ dataSources:
     name: chainlink prediction market
     network: kovan
     source:
-      address: '0x18B55ab900b24b8c9891416c7E400cA2523E6c47'
+      address: '0x8c5036E9162bE7D0e65633616b878444b2eDB86a'
       abi: PredictionMarket
       startBlock: 21044971
     mapping:
