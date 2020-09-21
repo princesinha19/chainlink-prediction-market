@@ -12,7 +12,7 @@ contract PredictionMarket is AaveClient, APIConsumer {
     bool public isLessRisky;
     string resultApi;
     string resultPath;
-    bool public isStakedOnAave;
+    bool isStakedOnAave;
     bool public isMarketResolved;
     uint256 public marketCloseTimestamp;
     uint256 public predictionCloseTimestamp;
@@ -81,10 +81,10 @@ contract PredictionMarket is AaveClient, APIConsumer {
         emit NewPrediction(msg.sender, _prediction, _stakeAmount);
     }
 
-    function AavelendOnAave() public {
+    function lendOnAave() public {
         require(
             block.timestamp >= predictionCloseTimestamp,
-            "Can't Aavelend before all prediction !!"
+            "Can't lend before all prediction !!"
         );
 
         if (totalAmountStaked > 0) {
