@@ -1,0 +1,36 @@
+type Prediction @entity {
+  id: ID!
+  predictor: Bytes!
+  prediction: Bytes!
+  stake: BigInt!
+}
+
+type Lend @entity {
+  id: ID!
+  amount: BigInt!
+}
+
+type Market @entity {
+  id: ID!
+  resolveTime: BigInt!
+  isResolved: Boolean!
+  name: String
+  token: Bytes
+  type: String
+  question: String
+  # positions: [Position!]
+  startTime: BigInt
+  closeTime: BigInt
+}
+
+type Position @entity {
+  id: ID!
+  position: Bytes
+}
+
+type Predictor @entity {
+  id: ID!
+  address: Bytes!
+  activeStake: BigInt!
+  marketID: Bytes # set to Market.id
+}
