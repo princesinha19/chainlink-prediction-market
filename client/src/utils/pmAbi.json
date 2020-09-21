@@ -320,6 +320,19 @@
 	},
 	{
 		"inputs": [],
+		"name": "isStakedOnAave",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "lendOnAave",
 		"outputs": [],
 		"stateMutability": "nonpayable",
