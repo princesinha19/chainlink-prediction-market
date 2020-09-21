@@ -39,6 +39,8 @@ export default function CreateMarket() {
     const [loading, setLoading] = useState(true);
     const [isProcessing, setIsProcessing] = useState(false);
     const [isApproving, setIsApproving] = useState(false);
+    const [isLending, setIsLending] = useState(false);
+    const [isResolving, setIsResolving] = useState(false);
     const [isMakingPrediction, setIsMakingPrediction] = useState(false);
     const [showMakePrediction, setShowMakePrediction] = useState(false);
     const [provider, setProvider] = useState("");
@@ -58,6 +60,7 @@ export default function CreateMarket() {
         isMarketResolved: false,
         isAlreadyWithdrawn: false,
         rewardAmount: "",
+        isStakedOnAave: false,
     });
 
     const [addressPredictions] = useState([]);
@@ -119,6 +122,11 @@ export default function CreateMarket() {
             );
         }
 
+        let isStakedOnAave;
+        if (currentUnixTime() > Number(predictionCloseTimestamp)) {
+            isStakedOnAave = await contract.isStakedOnAave();
+        }
+
         setState({
             ...state,
             question,
@@ -131,6 +139,7 @@ export default function CreateMarket() {
             isMarketResolved,
             isAlreadyWithdrawn,
             rewardAmount,
+            isStakedOnAave,
         });
 
         setLoading(false);
@@ -183,6 +192,40 @@ export default function CreateMarket() {
             });
         } catch (error) {
             setIsMakingPrediction(false);
+            setErrorModal({
+                open: true,
+                msg: error.message,
+            });
+        }
+    }
+
+    const lendOnAave = async () => {
+        try {
+            const tx = await contractInstance.lendOnAave();
+
+            setIsLending(true);
+            await provider.waitForTransaction(tx.hash);
+
+            setIsLending(false);
+        } catch (error) {
+            setIsLending(false);
+            setErrorModal({
+                open: true,
+                msg: error.message,
+            });
+        }
+    }
+
+    const resolveMarket = async () => {
+        try {
+            const tx = await contractInstance.resolveMarket();
+
+            setIsResolving(true);
+            await provider.waitForTransaction(tx.hash);
+
+            setIsResolving(false);
+        } catch (error) {
+            setIsResolving(false);
             setErrorModal({
                 open: true,
                 msg: error.message,
@@ -287,6 +330,46 @@ export default function CreateMarket() {
                                         <strong>Less Risk Market</strong>
                                     }
                                 </span>
+                            </Col>
+                        </Row>
+
+                        <Row>
+                            <Col className="text-center">
+                                {currentUnixTime() > Number(state.predictionCloseTimestamp) &&
+                                    !state.isStakedOnAave && !state.isMarketResolved ?
+                                    <Button
+                                        variant="success"
+                                        onClick={lendOnAave}
+                                        style={{ marginBottom: "30px" }}
+                                    >
+                                        {isLending ?
+                                            <div className="d-flex align-items-center">
+                                                Depositing
+                                                <span className="loading ml-2"></span>
+                                            </div>
+                                            :
+                                            <div>Deposit On Aave</div>
+                                        }
+                                    </Button>
+                                    : (currentUnixTime() > Number(state.marketCloseTimestamp) &&
+                                        !state.isMarketResolved ?
+                                        <Button
+                                            variant="warning"
+                                            onClick={resolveMarket}
+                                            style={{ marginBottom: "30px" }}
+                                        >
+                                            {isResolving ?
+                                                <div className="d-flex align-items-center">
+                                                    Resolving
+                                                <span className="loading ml-2"></span>
+                                                </div>
+                                                :
+                                                <div>Resolve Market</div>
+                                            }
+                                        </Button>
+                                        : null
+                                    )
+                                }
                             </Col>
                         </Row>
 

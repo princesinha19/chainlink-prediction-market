@@ -3,7 +3,7 @@
   "name": "Interest Prediction Market",
   "icons": [
     {
-      "src": "chainlink.svg",
+      "src": "chainlink.png",
       "type": "image/png"
     }
   ],
