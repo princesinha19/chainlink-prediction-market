@@ -12,7 +12,7 @@ contract PredictionMarket is AaveClient, APIConsumer {
     bool public isLessRisky;
     string resultApi;
     string resultPath;
-    bool isStakedOnAave;
+    bool public isStakedOnAave;
     bool public isMarketResolved;
     uint256 public marketCloseTimestamp;
     uint256 public predictionCloseTimestamp;

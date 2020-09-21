@@ -1,1 +1,1 @@
-PM Contract Address (Kovan): 0x18B55ab900b24b8c9891416c7E400cA2523E6c47
+PM Contract Address (Kovan): 0x8c5036E9162bE7D0e65633616b878444b2eDB86a

@@ -18,8 +18,8 @@ export default function CreateMarket() {
     const [markets, setMarkets] = useState([]);
 
     const contractAddresses = [
+        "0x8c5036E9162bE7D0e65633616b878444b2eDB86a",
         "0x18B55ab900b24b8c9891416c7E400cA2523E6c47",
-        "0xC70870923191326909d5f38cF98879965d17732F",
         "0x2a59f76C5Fb02eec9753a6308e8DfF1cd43Ff944",
         "0x7280d83039CB6a6D9C52D438a588E72eA403B84c",
     ];
