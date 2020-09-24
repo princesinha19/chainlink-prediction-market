@@ -10,8 +10,8 @@ contract PredictionMarket is AaveClient, APIConsumer {
     bytes32[] public options;
     uint8 public optionsCount;
     bool public isLessRisky;
-    string resultApi;
-    string resultPath;
+    string public resultApi;
+    string public resultPath;
     bool public isStakedOnAave;
     bool public isMarketResolved;
     uint256 public marketCloseTimestamp;

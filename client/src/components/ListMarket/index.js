@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Row, Card, Col, } from "react-bootstrap";
+import { Row, Card, Col } from "react-bootstrap";
 import { ethers } from 'ethers';
 import AlertModal from "../Utils/AlertModal";
 import Loading from "../Utils/Loading";
 import abi from "../../utils/pmAbi.json";
 
-export default function CreateMarket() {
+export default function ListMarket() {
     let routes;
 
     const [errorModal, setErrorModal] = useState({
@@ -18,8 +18,8 @@ export default function CreateMarket() {
     const [markets, setMarkets] = useState([]);
 
     const contractAddresses = [
+        "0x5381592583aa257404Ba753911f7e7d19E554675",
         "0x18B55ab900b24b8c9891416c7E400cA2523E6c47",
-        "0xC70870923191326909d5f38cF98879965d17732F",
         "0x2a59f76C5Fb02eec9753a6308e8DfF1cd43Ff944",
         "0x7280d83039CB6a6D9C52D438a588E72eA403B84c",
     ];
@@ -46,10 +46,11 @@ export default function CreateMarket() {
 
     const getAllMarkets = async () => {
         try {
+            const allMarkets = [];
+
             const web3 = window.ethereum;
             await web3.enable();
             const provider = new ethers.providers.Web3Provider(web3);
-            const allMarkets = [];
 
             if (contractAddresses.length > 0) {
                 for (let i = 0; i < contractAddresses.length; i++) {
@@ -125,7 +126,7 @@ export default function CreateMarket() {
                 </p>
 
                 {markets.map((element, k) => (
-                    <Link style={{ textDecoration: "none" }} to={`/market/${element.contractAddress}`}>
+                    <Link key={k} style={{ textDecoration: "none" }} to={`/market/${element.contractAddress}`}>
                         <Card className="mx-auto market-card" key={k}>
                             <Card.Body>
                                 <Row>
@@ -136,7 +137,7 @@ export default function CreateMarket() {
                                         {!element.isLessRisky ?
                                             <div>Normal Market</div>
                                             :
-                                            <div>Less Risk Market</div>
+                                            <div>No Loss Market</div>
                                         }
                                     </Col>
                                     <Col className="vertical-line">

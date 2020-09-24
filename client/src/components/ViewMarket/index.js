@@ -18,7 +18,7 @@ import erc20Abi from "../../utils/erc20Abi.json";
 import { useParams } from "react-router-dom";
 import history from "../Utils/History";
 
-export default function CreateMarket() {
+export default function ViewMarket() {
     let routes;
 
     const [errorModal, setErrorModal] = useState({
@@ -51,7 +51,8 @@ export default function CreateMarket() {
 
     const [state, setState] = useState({
         totalAmountStaked: "",
-        question: "Will trump win election ?",
+        question: "",
+        resultApi: "https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD",
         predictionCloseTimestamp: "",
         marketCloseTimestamp: "",
         isLessRisky: false,
@@ -82,6 +83,7 @@ export default function CreateMarket() {
         setContractInstance(contract);
 
         const question = await contract.question();
+        // const resultApi = await contract.resultApi();
         const isLessRisky = await contract.isLessRisky();
         const outcomeCount = await contract.optionsCount();
         const totalAmountStaked = await contract.totalAmountStaked();
@@ -327,11 +329,39 @@ export default function CreateMarket() {
                                     {!state.isLessRisky ?
                                         <strong>Normal Market</strong>
                                         :
-                                        <strong>Less Risk Market</strong>
+                                        <strong>No Loss Market</strong>
                                     }
                                 </span>
                             </Col>
                         </Row>
+
+                        <Row style={{ paddingBottom: "10px", textAlign: "center" }}>
+                            <Col>
+                                {currentUnixTime() > Number(state.predictionCloseTimestamp) ?
+                                    <span><strong>Result API: </strong></span>
+                                    :
+                                    null
+                                }
+                                <a href={state.resultApi} target="_blank" rel="noopener noreferrer">
+                                    <span> {state.resultApi}</span>
+                                </a>
+                            </Col>
+                        </Row>
+
+                        {currentUnixTime() < Number(state.predictionCloseTimestamp) ?
+                            <div className="mx-auto"
+                                style={{
+                                    width: "84%",
+                                    textAlign: "center",
+                                    color: "red",
+                                    marginBottom: "30px"
+                                }}
+                            >
+                                * Only invest if you trust above API, This will be used for
+                                fetching result at the time of resolving the market.
+                                </div>
+                            : null
+                        }
 
                         <Row>
                             <Col className="text-center">
@@ -340,7 +370,7 @@ export default function CreateMarket() {
                                     <Button
                                         variant="success"
                                         onClick={lendOnAave}
-                                        style={{ marginBottom: "30px" }}
+                                        style={{ marginBottom: "30px", marginTop: "20px" }}
                                     >
                                         {isLending ?
                                             <div className="d-flex align-items-center">
@@ -356,7 +386,7 @@ export default function CreateMarket() {
                                         <Button
                                             variant="warning"
                                             onClick={resolveMarket}
-                                            style={{ marginBottom: "30px" }}
+                                            style={{ marginBottom: "30px", marginTop: "20px" }}
                                         >
                                             {isResolving ?
                                                 <div className="d-flex align-items-center">
@@ -373,7 +403,10 @@ export default function CreateMarket() {
                             </Col>
                         </Row>
 
-                        <Table striped bordered hover style={{ textAlign: "center", marginBottom: "30px" }}>
+                        <Table striped bordered hover style={{
+                            textAlign: "center",
+                            marginBottom: "30px"
+                        }}>
                             <thead>
                                 <tr>
                                     <th>Outcome</th>
@@ -556,7 +589,7 @@ export default function CreateMarket() {
                                                 ...details,
                                                 amount: e.target.value
                                             })}
-                                            style={{ width: "75%" }}
+                                            style={{ width: "60%" }}
                                             value={details.amount}
                                             required
                                         />
