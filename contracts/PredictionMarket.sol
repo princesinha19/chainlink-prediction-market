@@ -7,7 +7,7 @@ import "./interfaces/IERC20.sol";
 contract PredictionMarket is AaveClient, APIConsumer {
     address public token;
     string public question;
-    bytes32[] public options;
+    uint256[] public options;
     uint8 public optionsCount;
     bool public isLessRisky;
     string public resultApi;
@@ -17,15 +17,18 @@ contract PredictionMarket is AaveClient, APIConsumer {
     uint256 public marketCloseTimestamp;
     uint256 public predictionCloseTimestamp;
     uint256 public totalAmountStaked;
+    bool public isConditionalMarket;
+    string public conditionType;
+    uint256 public conditionValue;
 
     // events
-    event NewPrediction(address, bytes32, uint256);
+    event NewPrediction(address, uint256, uint256);
     event AaveLend(uint256);
     event MarketResolved(uint256, bool);
     event Withdrawn(address, uint256);
 
     // Maps all the prediction made
-    mapping(address => bytes32) public prediction;
+    mapping(address => uint256) public prediction;
 
     // User amount staked for prediction
     mapping(address => uint256) public amountStaked;
@@ -34,18 +37,21 @@ contract PredictionMarket is AaveClient, APIConsumer {
     mapping(address => bool) public isAlreadyWithdrawn;
 
     // keeps staked amount for each uinque prediction
-    mapping(bytes32 => uint256) public uniquePredictionValue;
+    mapping(uint256 => uint256) public uniquePredictionValue;
 
     constructor(
         address _token,
         bool _isLessRisky,
         string memory _question,
-        bytes32[] memory _options,
+        uint256[] memory _options,
         uint8 _optionsCount,
         string memory _resultApi,
         string memory _resultPath,
         uint256 _marketCloseTimestamp,
-        uint256 _predictionCloseTimestamp
+        uint256 _predictionCloseTimestamp,
+        bool _isConditionalMarket,
+        string memory _conditionType,
+        uint256 _conditionValue
     ) public {
         token = _token;
         question = _question;
@@ -56,15 +62,21 @@ contract PredictionMarket is AaveClient, APIConsumer {
         optionsCount = _optionsCount;
         marketCloseTimestamp = _marketCloseTimestamp;
         predictionCloseTimestamp = _predictionCloseTimestamp;
+        isConditionalMarket = _isConditionalMarket;
+
+        if (_isConditionalMarket) {
+            conditionType = _conditionType;
+            conditionValue = _conditionValue;
+        }
     }
 
-    function makePrediction(bytes32 _prediction, uint256 _stakeAmount) public {
+    function makePrediction(uint256 _prediction, uint256 _stakeAmount) public {
         require(
             block.timestamp <= predictionCloseTimestamp,
             "Prediction making deadline is over !!"
         );
         require(
-            prediction[msg.sender] == bytes32(0),
+            prediction[msg.sender] == 0,
             "You have already made a prediction !!"
         );
         require(
@@ -120,10 +132,16 @@ contract PredictionMarket is AaveClient, APIConsumer {
             "You have already withdrawn your reward"
         );
 
+        uint256 marketResult = predictionResult;
+
+        if (isConditionalMarket) {
+            marketResult = getConditionalMarketResult() == true ? 100 : 1;
+        }
+
         if (!isLessRisky) {
-            if (prediction[msg.sender] == predictionResult) {
+            if (prediction[msg.sender] == marketResult) {
                 uint256 ratio = amountStaked[msg.sender] /
-                    uniquePredictionValue[predictionResult];
+                    uniquePredictionValue[marketResult];
 
                 uint256 _transferAmount = ratio * tokenWithInterest;
 
@@ -135,9 +153,9 @@ contract PredictionMarket is AaveClient, APIConsumer {
         } else {
             uint256 transferAmount = amountStaked[msg.sender];
 
-            if (prediction[msg.sender] == predictionResult) {
+            if (prediction[msg.sender] == marketResult) {
                 uint256 ratio = amountStaked[msg.sender] /
-                    uniquePredictionValue[predictionResult];
+                    uniquePredictionValue[marketResult];
 
                 uint256 reward = ratio *
                     (tokenWithInterest - totalAmountStaked);
@@ -150,11 +168,42 @@ contract PredictionMarket is AaveClient, APIConsumer {
         }
     }
 
+    function getConditionalMarketResult() public view returns (bool) {
+        require(isMarketResolved, "Result doesn't came yet !!");
+        require(isConditionalMarket, "Market is not conditional !!");
+
+        bool result;
+
+        if (
+            keccak256(abi.encodePacked(conditionType)) ==
+            keccak256(abi.encodePacked("above")) &&
+            predictionResult > conditionValue
+        ) {
+            result = true;
+        }
+
+        if (
+            keccak256(abi.encodePacked(conditionType)) ==
+            keccak256(abi.encodePacked("below")) &&
+            predictionResult < conditionValue
+        ) {
+            result = true;
+        }
+
+        return result;
+    }
+
     function getRewardAmount(address _address) public view returns (uint256) {
+        uint256 marketResult = predictionResult;
+
+        if (isConditionalMarket) {
+            marketResult = getConditionalMarketResult() == true ? 100 : 1;
+        }
+
         if (!isLessRisky) {
-            if (prediction[_address] == predictionResult) {
+            if (prediction[_address] == marketResult) {
                 uint256 ratio = amountStaked[_address] /
-                    uniquePredictionValue[predictionResult];
+                    uniquePredictionValue[marketResult];
 
                 uint256 totalAmount = ratio * tokenWithInterest;
 
@@ -165,9 +214,9 @@ contract PredictionMarket is AaveClient, APIConsumer {
         } else {
             uint256 transferAmount = amountStaked[_address];
 
-            if (prediction[_address] == predictionResult) {
+            if (prediction[_address] == marketResult) {
                 uint256 ratio = amountStaked[_address] /
-                    uniquePredictionValue[predictionResult];
+                    uniquePredictionValue[marketResult];
 
                 uint256 reward = ratio *
                     (tokenWithInterest - totalAmountStaked);
