@@ -218,7 +218,7 @@ export default function ViewMarket() {
             setSuccessModal({
                 open: true,
                 msg: "Congratulations !! " +
-                    "Your have succesfully made your prediction !!",
+                    "You have successfully made your prediction !!",
             });
         } catch (error) {
             setIsMakingPrediction(false);
@@ -253,6 +253,11 @@ export default function ViewMarket() {
             await provider.waitForTransaction(tx.hash);
 
             setIsLending(false);
+
+            setSuccessModal({
+                open: true,
+                msg: "Succesfully deposited Staked DAI to Aave !!",
+            });
         } catch (error) {
             setIsLending(false);
             setErrorModal({
@@ -270,6 +275,12 @@ export default function ViewMarket() {
             await provider.waitForTransaction(tx.hash);
 
             setIsResolving(false);
+
+            setSuccessModal({
+                open: true,
+                msg: "Congratulations !! " +
+                    "You successfully resolved the Market !!",
+            });
         } catch (error) {
             setIsResolving(false);
             setErrorModal({
@@ -292,7 +303,7 @@ export default function ViewMarket() {
             setSuccessModal({
                 open: true,
                 msg: "Congratulations !! " +
-                    "Your have succesfully recieved your reward !!",
+                    "Your have successfully recieved your reward !!",
             });
         } catch (error) {
             setIsProcessing(false);
