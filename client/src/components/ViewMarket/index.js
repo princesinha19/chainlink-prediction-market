@@ -47,12 +47,11 @@ export default function ViewMarket() {
     const [contractInstance, setContractInstance] = useState("");
     const { pmContractAddress } = useParams();
     const daiContractAddress = "0xFf795577d9AC8bD7D90Ee22b6C1703490b6512FD";
-    const zeroBytes = "0x0000000000000000000000000000000000000000000000000000000000000000";
 
     const [state, setState] = useState({
         totalAmountStaked: "",
         question: "",
-        resultApi: "https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD",
+        resultApi: "",
         predictionCloseTimestamp: "",
         marketCloseTimestamp: "",
         isLessRisky: false,
@@ -62,6 +61,8 @@ export default function ViewMarket() {
         isAlreadyWithdrawn: false,
         rewardAmount: "",
         isStakedOnAave: false,
+        isConditionalMarket: false,
+        chainlinkResult: "",
     });
 
     const [addressPredictions] = useState([]);
@@ -83,45 +84,58 @@ export default function ViewMarket() {
         setContractInstance(contract);
 
         const question = await contract.question();
-        // const resultApi = await contract.resultApi();
+        const resultApi = await contract.resultApi();
         const isLessRisky = await contract.isLessRisky();
-        const outcomeCount = await contract.optionsCount();
+        const optionsCount = await contract.optionsCount();
         const totalAmountStaked = await contract.totalAmountStaked();
         const marketCloseTimestamp = await contract.marketCloseTimestamp();
         const predictionCloseTimestamp = await contract.predictionCloseTimestamp();
+        const isConditionalMarket = await contract.isConditionalMarket();
 
         let outcomes = [];
+        const outcomeCount = isConditionalMarket ? 2 : optionsCount;
         for (let i = 0; i < outcomeCount; i++) {
             const prediction = await contract.options(i);
-            const predictionValue = await contract.uniquePredictionValue(prediction);
+            const predictionValue = await contract.uniquePredictionValue(Number(prediction));
 
             outcomes.push({
-                outcome: prediction,
+                outcome: getFormattedPrediction(isConditionalMarket, prediction),
                 amountStaked: ethers.utils.formatEther(predictionValue),
             });
         }
 
         let addressStake;
         const addressPrediction = await contract.prediction(signerAddress);
-        if (addressPrediction !== zeroBytes) {
+        if (Number(addressPrediction) >= 0) {
             addressStake = ethers.utils.formatEther(
                 await contract.amountStaked(signer.getAddress())
             );
         }
 
         addressPredictions.push({
-            prediction: addressPrediction,
+            prediction: getFormattedPrediction(isConditionalMarket, addressPrediction),
             stakeAmount: addressStake,
         });
 
-        let predictionResult, isMarketResolved, isAlreadyWithdrawn, rewardAmount;
+        let predictionResult, chainlinkResult, isMarketResolved, isAlreadyWithdrawn, rewardAmount;
         if (currentUnixTime() > Number(marketCloseTimestamp)) {
-            predictionResult = await contract.predictionResult();
+            chainlinkResult = await contract.predictionResult();
             isMarketResolved = await contract.isMarketResolved();
+
+            if (!isConditionalMarket) {
+                predictionResult = Number(chainlinkResult);
+            } else if (isMarketResolved) {
+                predictionResult = await contract.getConditionalMarketResult();
+                predictionResult = predictionResult ? "Yes" : "No";
+            }
+
             isAlreadyWithdrawn = await contract.isAlreadyWithdrawn(signerAddress);
-            rewardAmount = ethers.utils.formatEther(
-                await contract.getRewardAmount(signerAddress)
-            );
+
+            if (isMarketResolved) {
+                rewardAmount = ethers.utils.formatEther(
+                    await contract.getRewardAmount(signerAddress)
+                );
+            }
         }
 
         let isStakedOnAave;
@@ -137,11 +151,14 @@ export default function ViewMarket() {
             totalAmountStaked: ethers.utils.formatEther(totalAmountStaked),
             marketCloseTimestamp: Number(marketCloseTimestamp),
             predictionCloseTimestamp: Number(predictionCloseTimestamp),
-            predictionResult: predictionResult,
+            predictionResult,
             isMarketResolved,
             isAlreadyWithdrawn,
             rewardAmount,
             isStakedOnAave,
+            resultApi,
+            isConditionalMarket,
+            chainlinkResult,
         });
 
         setLoading(false);
@@ -178,8 +195,19 @@ export default function ViewMarket() {
 
             setIsMakingPrediction(true);
 
+            let prediction;
+            if (state.isConditionalMarket) {
+                if (details.prediction === "Yes") {
+                    prediction = 100;
+                } else if (details.prediction === "No") {
+                    prediction = 1;
+                }
+            } else {
+                prediction = details.prediction;
+            }
+
             const tx = await contractInstance.makePrediction(
-                details.prediction,
+                prediction,
                 amount,
             );
 
@@ -199,6 +227,22 @@ export default function ViewMarket() {
                 msg: error.message,
             });
         }
+    }
+
+    const getFormattedPrediction = (isConditionalMarket, prediction) => {
+        let outcome;
+
+        if (isConditionalMarket) {
+            if (Number(prediction) === 100) {
+                outcome = "Yes";
+            } else if (Number(prediction) === 1) {
+                outcome = "No";
+            }
+        } else {
+            outcome = Number(prediction);
+        }
+
+        return outcome;
     }
 
     const lendOnAave = async () => {
@@ -353,13 +397,35 @@ export default function ViewMarket() {
                                 style={{
                                     width: "84%",
                                     textAlign: "center",
-                                    color: "red",
-                                    marginBottom: "30px"
+                                    color: "red"
                                 }}
                             >
                                 * Only invest if you trust above API, This will be used for
                                 fetching result at the time of resolving the market.
                                 </div>
+                            : null
+                        }
+
+                        {state.isMarketResolved ?
+                            <Row style={{
+                                paddingTop: "10px",
+                                paddingBottom: "10px",
+                                textAlign: "center",
+                                fontWeight: "bold",
+                                color: "rgb(10, 131, 103)",
+                                fontSize: "20px"
+                            }}>
+                                <Col>
+                                    <span>Result: </span>
+                                    <span >{state.predictionResult}</span>
+
+                                    {state.isConditionalMarket ?
+                                        <span> ({Number(state.chainlinkResult)})</span>
+                                        :
+                                        null
+                                    }
+                                </Col>
+                            </Row>
                             : null
                         }
 
@@ -370,7 +436,7 @@ export default function ViewMarket() {
                                     <Button
                                         variant="success"
                                         onClick={lendOnAave}
-                                        style={{ marginBottom: "30px", marginTop: "20px" }}
+                                        style={{ marginTop: "20px" }}
                                     >
                                         {isLending ?
                                             <div className="d-flex align-items-center">
@@ -386,7 +452,7 @@ export default function ViewMarket() {
                                         <Button
                                             variant="warning"
                                             onClick={resolveMarket}
-                                            style={{ marginBottom: "30px", marginTop: "20px" }}
+                                            style={{ marginTop: "20px" }}
                                         >
                                             {isResolving ?
                                                 <div className="d-flex align-items-center">
@@ -405,6 +471,7 @@ export default function ViewMarket() {
 
                         <Table striped bordered hover style={{
                             textAlign: "center",
+                            marginTop: "20px",
                             marginBottom: "30px"
                         }}>
                             <thead>
@@ -417,7 +484,7 @@ export default function ViewMarket() {
                             <tbody>
                                 {state.outcomes.map((element, k) => (
                                     <tr key={k}>
-                                        <td>{Number(element.outcome)}</td>
+                                        <td>{element.outcome}</td>
                                         <td>{element.amountStaked} DAI</td>
                                         <td>{Number(state.totalAmountStaked) <= 0 ?
                                             <div>0 %</div>
@@ -432,7 +499,7 @@ export default function ViewMarket() {
                             </tbody>
                         </Table>
 
-                        {Number(addressPredictions[0].prediction) !== 0 ?
+                        {addressPredictions[0].prediction ?
                             <Row>
                                 <Col>
                                     <p style={{
@@ -474,7 +541,7 @@ export default function ViewMarket() {
                                         <tbody>
                                             {addressPredictions.map((element, k) => (
                                                 <tr key={k}>
-                                                    <td>{Number(element.prediction)}</td>
+                                                    <td>{element.prediction}</td>
 
                                                     <td>{element.stakeAmount} DAI</td>
 
@@ -561,7 +628,7 @@ export default function ViewMarket() {
                                                 paddingBottom: "30px",
                                                 width: "150px"
                                             }}
-                                            title={Number(details.prediction)}
+                                            title={details.prediction}
                                             variant="outline-info"
                                             onSelect={(event) => setDetails({
                                                 ...details,
@@ -570,7 +637,7 @@ export default function ViewMarket() {
                                         >
                                             {state.outcomes.map((element, key) => (
                                                 <Dropdown.Item key={key} eventKey={element.outcome}>
-                                                    {Number(element.outcome)}
+                                                    {element.outcome}
                                                 </Dropdown.Item>
                                             ))}
                                         </DropdownButton>
@@ -624,7 +691,7 @@ export default function ViewMarket() {
                     </Card.Body>
 
                     {!showMakePrediction && currentUnixTime() < Number(state.predictionCloseTimestamp) &&
-                        addressPredictions[0].prediction === zeroBytes ?
+                        Number(addressPredictions[0].stakeAmount) === 0 ?
                         <Card.Footer className="text-center" style={{ backgroundColor: '#FFFFFF50' }}>
                             <Button
                                 onClick={setShowMakePrediction}

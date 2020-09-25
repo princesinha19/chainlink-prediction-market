@@ -18,10 +18,10 @@ export default function ListMarket() {
     const [markets, setMarkets] = useState([]);
 
     const contractAddresses = [
-        "0x5381592583aa257404Ba753911f7e7d19E554675",
+        "0x7AfE906624a79Fb351dE6340777225bAE65f7bB6",
+        "0xdED5a05CccfCef9Af5D9ef70ABf21f1d17D7C107",
+        "0xAc5D0F82954A6468Cb1052e891DEC14910ef7DbC",
         "0x18B55ab900b24b8c9891416c7E400cA2523E6c47",
-        "0x2a59f76C5Fb02eec9753a6308e8DfF1cd43Ff944",
-        "0x7280d83039CB6a6D9C52D438a588E72eA403B84c",
     ];
 
     // const checkWeb3Connection = async () => {
