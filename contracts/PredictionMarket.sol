@@ -13,7 +13,6 @@ contract PredictionMarket is AaveClient, APIConsumer {
     string public resultApi;
     string public resultPath;
     bool public isStakedOnAave;
-    bool public isMarketResolved;
     uint256 public marketCloseTimestamp;
     uint256 public predictionCloseTimestamp;
     uint256 public totalAmountStaked;
@@ -112,8 +111,6 @@ contract PredictionMarket is AaveClient, APIConsumer {
             "Can't resolve market before deadline !!"
         );
         require(!isMarketResolved, "Marker already resolved !!");
-
-        isMarketResolved = true;
 
         if (isStakedOnAave) {
             // Withdraw all staked asset from Aave

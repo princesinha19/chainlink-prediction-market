@@ -3,6 +3,7 @@ pragma solidity ^0.6.0;
 import "https://github.com/smartcontractkit/chainlink/blob/develop/evm-contracts/src/v0.6/ChainlinkClient.sol";
 
 contract APIConsumer is ChainlinkClient {
+    bool public isMarketResolved;
     uint256 public predictionResult;
 
     address private oracle;
@@ -54,5 +55,7 @@ contract APIConsumer is ChainlinkClient {
         recordChainlinkFulfillment(_requestId)
     {
         predictionResult = _data;
+
+        isMarketResolved = true;
     }
 }

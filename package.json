@@ -7,7 +7,7 @@
   },
   "scripts": {
     "get:dependency": "cd client/ && yarn",
-    "start:client": "cd client/ && yarn start",
+    "start": "cd client/ && yarn start",
     "compile": "truffle compile"
   },
   "author": "",
