@@ -3,7 +3,7 @@ pragma solidity ^0.6.0;
 import "https://github.com/smartcontractkit/chainlink/blob/develop/evm-contracts/src/v0.6/ChainlinkClient.sol";
 
 contract APIConsumer is ChainlinkClient {
-    bytes32 public predictionResult;
+    uint256 public predictionResult;
 
     address private oracle;
     bytes32 private jobId;
@@ -25,10 +25,10 @@ contract APIConsumer is ChainlinkClient {
     /**
      * Create a Chainlink request to retrieve API response, find the target price
      */
-    function requestResult(
-        string memory api,
-        string memory path
-    ) internal returns (bytes32 requestId) {
+    function requestResult(string memory api, string memory path)
+        internal
+        returns (bytes32 requestId)
+    {
         Chainlink.Request memory request = buildChainlinkRequest(
             jobId,
             address(this),
@@ -49,7 +49,7 @@ contract APIConsumer is ChainlinkClient {
     /**
      * Receive the response in the form of uint256
      */
-    function fulfill(bytes32 _requestId, bytes32 _data)
+    function fulfill(bytes32 _requestId, uint256 _data)
         public
         recordChainlinkFulfillment(_requestId)
     {

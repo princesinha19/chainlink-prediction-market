@@ -17,9 +17,9 @@
 				"type": "string"
 			},
 			{
-				"internalType": "bytes32[]",
+				"internalType": "uint256[]",
 				"name": "_options",
-				"type": "bytes32[]"
+				"type": "uint256[]"
 			},
 			{
 				"internalType": "uint8",
@@ -44,6 +44,21 @@
 			{
 				"internalType": "uint256",
 				"name": "_predictionCloseTimestamp",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "_isConditionalMarket",
+				"type": "bool"
+			},
+			{
+				"internalType": "string",
+				"name": "_conditionType",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_conditionValue",
 				"type": "uint256"
 			}
 		],
@@ -132,9 +147,9 @@
 			},
 			{
 				"indexed": false,
-				"internalType": "bytes32",
+				"internalType": "uint256",
 				"name": "",
-				"type": "bytes32"
+				"type": "uint256"
 			},
 			{
 				"indexed": false,
@@ -185,6 +200,32 @@
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "conditionType",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "conditionValue",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "bytes32",
@@ -192,9 +233,9 @@
 				"type": "bytes32"
 			},
 			{
-				"internalType": "bytes32",
+				"internalType": "uint256",
 				"name": "_data",
-				"type": "bytes32"
+				"type": "uint256"
 			}
 		],
 		"name": "fulfill",
@@ -223,6 +264,19 @@
 				"internalType": "uint256",
 				"name": "",
 				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getConditionalMarketResult",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
 			}
 		],
 		"stateMutability": "view",
@@ -294,6 +348,19 @@
 	},
 	{
 		"inputs": [],
+		"name": "isConditionalMarket",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "isLessRisky",
 		"outputs": [
 			{
@@ -341,9 +408,9 @@
 	{
 		"inputs": [
 			{
-				"internalType": "bytes32",
+				"internalType": "uint256",
 				"name": "_prediction",
-				"type": "bytes32"
+				"type": "uint256"
 			},
 			{
 				"internalType": "uint256",
@@ -380,9 +447,9 @@
 		"name": "options",
 		"outputs": [
 			{
-				"internalType": "bytes32",
+				"internalType": "uint256",
 				"name": "",
-				"type": "bytes32"
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -412,9 +479,9 @@
 		"name": "prediction",
 		"outputs": [
 			{
-				"internalType": "bytes32",
+				"internalType": "uint256",
 				"name": "",
-				"type": "bytes32"
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -438,9 +505,9 @@
 		"name": "predictionResult",
 		"outputs": [
 			{
-				"internalType": "bytes32",
+				"internalType": "uint256",
 				"name": "",
-				"type": "bytes32"
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -534,9 +601,9 @@
 	{
 		"inputs": [
 			{
-				"internalType": "bytes32",
+				"internalType": "uint256",
 				"name": "",
-				"type": "bytes32"
+				"type": "uint256"
 			}
 		],
 		"name": "uniquePredictionValue",
