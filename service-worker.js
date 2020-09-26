@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/chainlink-prediction-market/precache-manifest.8171f4a576605e4415a12219d53745a6.js"
+  "/chainlink-prediction-market/precache-manifest.3646f2bf7409cd8662ca5ca8a870d433.js"
 );
 
 self.addEventListener('message', (event) => {
