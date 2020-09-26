@@ -1,5 +1,6 @@
 {
   "name": "chainlink-prediction-market",
+  "homepage": "https://princesinha19.github.io/chainlink-prediction-market/",
   "version": "1.0.0",
   "description": "Prediction Market using Chainlink and Aave",
   "directories": {
