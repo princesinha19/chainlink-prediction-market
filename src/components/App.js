@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import {
-    Switch,
+    BrowserRouter,
     Router,
     Route,
     Redirect,
@@ -13,7 +13,7 @@ import ListMarket from './ListMarket/index';
 
 function App() {
     const routes = (
-        <Switch>
+        <BrowserRouter basename={process.env.PUBLIC_URL}>
             <Route path="/" exact>
                 <ListMarket />
             </Route>
@@ -21,7 +21,7 @@ function App() {
                 <ViewMarket />
             </Route>
             <Redirect to="/" />
-        </Switch>
+        </BrowserRouter>
     );
 
     return (
