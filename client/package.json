@@ -1,5 +1,6 @@
 {
-  "name": "interest-prediction-market",
+  "name": "chainlink-prediction-market",
+  "homepage": "https://princesinha19.github.io/chainlink-prediction-market/",
   "version": "0.1.0",
   "dependencies": {
     "bootstrap": "^4.5.0",

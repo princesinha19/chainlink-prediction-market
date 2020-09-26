@@ -1,7 +1,7 @@
 {
-  "name": "interest-prediction-market",
+  "name": "chainlink-prediction-market",
   "version": "1.0.0",
-  "description": "Interest Prediction Market using Chainlink and Aave",
+  "description": "Prediction Market using Chainlink and Aave",
   "directories": {
     "test": "test"
   },
