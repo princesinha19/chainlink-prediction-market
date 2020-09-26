@@ -1,0 +1,14 @@
+{
+  "short_name": "Chainlink Prediction Market",
+  "name": "Chainlink Prediction Market",
+  "icons": [
+    {
+      "src": "chainlink.png",
+      "type": "image/png"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
