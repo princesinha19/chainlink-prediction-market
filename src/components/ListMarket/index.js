@@ -18,8 +18,8 @@ export default function ListMarket() {
     const [markets, setMarkets] = useState([]);
 
     const contractAddresses = [
+        "0x67A702b6b0498D90310CD6794c642B8A4bC39760",
         "0x37e0B7A17F90868F747F7421A3592e32d41FA2d0",
-        "0x9D81492176981c6e52eAdEf69926A8Cc927Ba81C",
         "0x7AfE906624a79Fb351dE6340777225bAE65f7bB6",
         "0xdED5a05CccfCef9Af5D9ef70ABf21f1d17D7C107",
         "0xAc5D0F82954A6468Cb1052e891DEC14910ef7DbC",

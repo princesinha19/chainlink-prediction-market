@@ -21,10 +21,10 @@ contract PredictionMarket is AaveClient, APIConsumer {
     uint256 public conditionValue;
 
     // events
-    event NewPrediction(address, uint256, uint256);
-    event AaveLend(uint256);
-    event MarketResolved(uint256, bool);
-    event Withdrawn(address, uint256);
+    event NewPrediction(address predictor, uint256 prediction, uint256 stake);
+    event AaveLend(uint256 amount);
+    event MarketResolved(uint256 blockNumber, bool isResolved);
+    event Withdrawn(address withdrawer, uint256 amount);
 
     // Maps all the prediction made
     mapping(address => uint256) public prediction;

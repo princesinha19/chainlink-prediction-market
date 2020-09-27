@@ -2,10 +2,10 @@ import React from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import {
-    BrowserRouter,
-    Router,
+    HashRouter,
     Route,
     Redirect,
+    Switch,
 } from "react-router-dom";
 import history from './Utils/History';
 import ViewMarket from './ViewMarket/index';
@@ -13,7 +13,7 @@ import ListMarket from './ListMarket/index';
 
 function App() {
     const routes = (
-        <BrowserRouter basename={process.env.PUBLIC_URL}>
+        <Switch>
             <Route path="/" exact>
                 <ListMarket />
             </Route>
@@ -21,14 +21,14 @@ function App() {
                 <ViewMarket />
             </Route>
             <Redirect to="/" />
-        </BrowserRouter>
+        </Switch>
     );
 
     return (
         <div className="App">
-            <Router history={history}>
+            <HashRouter history={history}>
                 {routes}
-            </Router>
+            </HashRouter>
         </div>
     );
 }
