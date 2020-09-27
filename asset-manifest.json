@@ -1,25 +1,25 @@
 {
   "files": {
     "main.css": "/chainlink-prediction-market/static/css/main.a60c3d85.chunk.css",
-    "main.js": "/chainlink-prediction-market/static/js/main.d134a58a.chunk.js",
-    "main.js.map": "/chainlink-prediction-market/static/js/main.d134a58a.chunk.js.map",
+    "main.js": "/chainlink-prediction-market/static/js/main.bb46bd44.chunk.js",
+    "main.js.map": "/chainlink-prediction-market/static/js/main.bb46bd44.chunk.js.map",
     "runtime-main.js": "/chainlink-prediction-market/static/js/runtime-main.7151e874.js",
     "runtime-main.js.map": "/chainlink-prediction-market/static/js/runtime-main.7151e874.js.map",
     "static/css/2.8aa5a7f8.chunk.css": "/chainlink-prediction-market/static/css/2.8aa5a7f8.chunk.css",
-    "static/js/2.23c83531.chunk.js": "/chainlink-prediction-market/static/js/2.23c83531.chunk.js",
-    "static/js/2.23c83531.chunk.js.map": "/chainlink-prediction-market/static/js/2.23c83531.chunk.js.map",
+    "static/js/2.05805d91.chunk.js": "/chainlink-prediction-market/static/js/2.05805d91.chunk.js",
+    "static/js/2.05805d91.chunk.js.map": "/chainlink-prediction-market/static/js/2.05805d91.chunk.js.map",
     "index.html": "/chainlink-prediction-market/index.html",
-    "precache-manifest.d30180d13e05d676c85eb9153df52612.js": "/chainlink-prediction-market/precache-manifest.d30180d13e05d676c85eb9153df52612.js",
+    "precache-manifest.1e84fd1f251fae7810d2a36a39a578f2.js": "/chainlink-prediction-market/precache-manifest.1e84fd1f251fae7810d2a36a39a578f2.js",
     "service-worker.js": "/chainlink-prediction-market/service-worker.js",
     "static/css/2.8aa5a7f8.chunk.css.map": "/chainlink-prediction-market/static/css/2.8aa5a7f8.chunk.css.map",
     "static/css/main.a60c3d85.chunk.css.map": "/chainlink-prediction-market/static/css/main.a60c3d85.chunk.css.map",
-    "static/js/2.23c83531.chunk.js.LICENSE.txt": "/chainlink-prediction-market/static/js/2.23c83531.chunk.js.LICENSE.txt"
+    "static/js/2.05805d91.chunk.js.LICENSE.txt": "/chainlink-prediction-market/static/js/2.05805d91.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.7151e874.js",
     "static/css/2.8aa5a7f8.chunk.css",
-    "static/js/2.23c83531.chunk.js",
+    "static/js/2.05805d91.chunk.js",
     "static/css/main.a60c3d85.chunk.css",
-    "static/js/main.d134a58a.chunk.js"
+    "static/js/main.bb46bd44.chunk.js"
   ]
 }
