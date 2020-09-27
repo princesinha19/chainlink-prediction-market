@@ -71,7 +71,7 @@
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "",
+				"name": "amount",
 				"type": "uint256"
 			}
 		],
@@ -123,13 +123,13 @@
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "",
+				"name": "blockNumber",
 				"type": "uint256"
 			},
 			{
 				"indexed": false,
 				"internalType": "bool",
-				"name": "",
+				"name": "isResolved",
 				"type": "bool"
 			}
 		],
@@ -142,19 +142,19 @@
 			{
 				"indexed": false,
 				"internalType": "address",
-				"name": "",
+				"name": "predictor",
 				"type": "address"
 			},
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "",
+				"name": "prediction",
 				"type": "uint256"
 			},
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "",
+				"name": "stake",
 				"type": "uint256"
 			}
 		],
@@ -167,13 +167,13 @@
 			{
 				"indexed": false,
 				"internalType": "address",
-				"name": "",
+				"name": "withdrawer",
 				"type": "address"
 			},
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "",
+				"name": "amount",
 				"type": "uint256"
 			}
 		],
