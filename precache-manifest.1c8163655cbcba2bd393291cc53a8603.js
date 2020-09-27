@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "62001ed45ae8949c9891451b041dec98",
+    "revision": "564f1e47e7a3f03a53f0f291743e9d0b",
     "url": "/chainlink-prediction-market/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/chainlink-prediction-market/static/css/2.8aa5a7f8.chunk.css"
   },
   {
-    "revision": "05f392fe9ac9818c3198",
+    "revision": "3cae99eb88b6885a756e",
     "url": "/chainlink-prediction-market/static/css/main.a60c3d85.chunk.css"
   },
   {
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/chainlink-prediction-market/static/js/2.05805d91.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "05f392fe9ac9818c3198",
-    "url": "/chainlink-prediction-market/static/js/main.bb46bd44.chunk.js"
+    "revision": "3cae99eb88b6885a756e",
+    "url": "/chainlink-prediction-market/static/js/main.ea58c84f.chunk.js"
   },
   {
     "revision": "dd55795f9ad40b6fecbf",
